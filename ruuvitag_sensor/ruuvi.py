@@ -141,7 +141,7 @@ class RuuviTagSensor(object):
                 data_iter.send(StopIteration)
                 break
             # Check MAC whitelist
-            if macs and not ble_data[0] in macs:
+            if len(macs) != 0 and ble_data[0] not in macs:
                 continue
             (data_format, data) = DataFormats.convert_data(ble_data[1])
             # Check that encoded data is valid RuuviTag data and it is sensor data
