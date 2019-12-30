@@ -109,6 +109,7 @@ class BleCommunicationNix(BleCommunication):
                 if mac in blacklist:
                     continue
                 data = line[26:]
+                log.info('line %s', line)
                 yield (mac, data)
             except GeneratorExit:
                 break
@@ -148,7 +149,7 @@ class BleCommunicationBleson(BleCommunication):
                 data = line.service_data or line.mfg_data
                 if data is None:
                     continue
-                queue.put((mac, data))
+                queue.put((mac, data, line.rssi))
             except GeneratorExit:
                 break
             except:

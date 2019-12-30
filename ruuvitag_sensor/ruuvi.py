@@ -140,7 +140,7 @@ class RuuviTagSensor(object):
                 data_iter.send(StopIteration)
                 break
             # Check MAC whitelist
-            if macs and not ble_data[0] in macs:
+            if len(macs) != 0 and ble_data[0] not in macs:
                 continue
             (data_format, data) = DataFormats.convert_data(ble_data[1])
             # Check that encoded data is valid RuuviTag data and it is sensor data
@@ -148,6 +148,8 @@ class RuuviTagSensor(object):
             if data is not None:
                 state = get_decoder(data_format).decode_data(data)
                 if state is not None:
+                    rssi = ble_data[2]
+                    state['rssi'] = rssi
                     yield (ble_data[0], state)
                 else:
                     log.error('Decoded data is null. MAC: %s - Raw: %s', ble_data[0], ble_data[1])
